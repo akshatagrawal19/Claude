@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Search</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="home-body">
+
+  <!-- Top-right links -->
+  <header class="home-header">
+    <nav>
+      <a href="#" class="nav-link">About</a>
+      <a href="/api/stats" class="nav-link" target="_blank">Stats</a>
+    </nav>
+  </header>
+
+  <!-- Center content -->
+  <main class="home-main">
+    <div class="logo-wrap">
+      <span class="logo-n">N</span><span class="logo-e">e</span><span
+            class="logo-x">x</span><span class="logo-u">u</span><span
+            class="logo-s">s</span>
+    </div>
+    <p class="tagline">The open search engine</p>
+
+    <form class="search-form" action="/search" method="get" id="homeForm">
+      <div class="search-box-wrap">
+        <span class="search-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input
+          id="homeQuery"
+          class="search-input"
+          type="text"
+          name="q"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Search the web"
+          aria-label="Search"
+          autofocus
+        >
+        <button type="button" class="voice-btn" title="Voice search" aria-label="Voice search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+      </div>
+      <div class="home-btns">
+        <button type="submit" class="btn-primary">Nexus Search</button>
+        <button type="button" class="btn-secondary" onclick="lucky()">I'm Feeling Lucky</button>
+      </div>
+    </form>
+
+    <!-- Suggestions dropdown -->
+    <ul class="suggestions-list" id="suggestions" hidden></ul>
+  </main>
+
+  <footer class="home-footer">
+    <div class="footer-left">
+      <span>United States</span>
+    </div>
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy</a>
+      <a href="#" class="footer-link">Terms</a>
+      <a href="/api/stats" class="footer-link" target="_blank">Index Stats</a>
+    </div>
+  </footer>
+
+  <script src="/static/js/autocomplete.js"></script>
+  <script>
+    function lucky() {
+      const q = document.getElementById("homeQuery").value.trim();
+      if (!q) return;
+      fetch("/api/search?q=" + encodeURIComponent(q) + "&n=1")
+        .then(r => r.json())
+        .then(d => {
+          if (d.results && d.results.length > 0) {
+            window.location.href = d.results[0].url;
+          } else {
+            window.location.href = "/search?q=" + encodeURIComponent(q);
+          }
+        });
+    }
+  </script>
+</body>
+</html>
