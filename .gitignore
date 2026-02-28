@@ -12,3 +12,5 @@ data/index.json
 *.sqlite
 .DS_Store
 node_modules/
+.vercel/
+*.local
